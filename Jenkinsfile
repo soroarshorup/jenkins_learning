@@ -2,9 +2,23 @@ pipeline {
     agent any
 
     stages {
-        stage('Githube') {
+        stage('Build') {
+            agent {
+                docker {
+                    image 'node:10-alpine'
+                    reuseNode true 
+                }
+            }
+
             steps {
-                echo 'Hello World Jenkins'
+                sh '''
+                    ls -la
+                    node --version
+                    npm --version
+                    npm ci
+                    npm run build
+                    ls -la
+                '''
             }
         }
     }
